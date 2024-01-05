@@ -22,19 +22,18 @@ def run_thread() -> None:
     update_entry_state('disabled')
     global credentials
     credentials = {
-        'Username': username_entry.get(),
-        'Password': password_entry.get(),
+        'username': username_entry.get(),
+        'password': password_entry.get(),
     }
     Thread(target=full_sequence).start()
-
-
 
 
 def full_sequence():
     update_status('ORANGE', 'Starting Driver...')
     driver = driver_handler.start_driver()
+    driver.set_window_size(100, 500)
     update_status('GREEN', 'Logging In')
-    web_handler.login(driver)
+    web_handler.login(driver, credentials)
 
 
 def update_status(color, text) -> None:
