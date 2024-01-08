@@ -7,4 +7,5 @@ def start_driver():
     options = Options()
     options.headless = False
     options.EnableVerboseLogging = True
+    options.add_argument("--mute-audio")
     return uc.Chrome(options=options)
