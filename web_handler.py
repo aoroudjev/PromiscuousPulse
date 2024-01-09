@@ -6,7 +6,6 @@ from selenium.webdriver.common.keys import Keys
 from undetected_chromedriver import By
 
 
-
 def login(driver: selenium.webdriver.ie.webdriver.WebDriver, credentials: dict, first_login=False):
     driver.get('https://app.member.virginpulse.com/#/home')
     time.sleep(5)
@@ -18,6 +17,11 @@ def login(driver: selenium.webdriver.ie.webdriver.WebDriver, credentials: dict, 
     time.sleep(10)
     if driver.title != "Virgin Pulse - Home":
         raise ValueError
+
+
+def do_assessment(driver):
+    driver.get("https://app.member.virginpulse.com/#/surveys-ui/surveys/47069/intro")
+    driver.find_element(By.CSS_SELECTOR, "button[id='survey-start-button']").click()
 
 
 def track_habits(driver):
@@ -50,7 +54,7 @@ def track_habits(driver):
     button_elements = [elem for elem in driver.find_elements(By.TAG_NAME, "button") if
                        elem.accessible_name.lower() == "track it!"]
 
-    # JS click instead after entry input
+    # JS click after entry input
+    # TODO: not sure what blocks normal clicks, App?
     for button in button_elements:
         driver.execute_script("arguments[0].click();", button)
-
