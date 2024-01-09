@@ -51,7 +51,7 @@ def full_sequence():
         update_status('RED', 'Login Failed')
         update_entry_state('normal')
     update_options_state('normal')
-    web_handler.do_dailies(driver)
+    web_handler.track_habits(driver)
 
 
 def update_status(color, text) -> None:
