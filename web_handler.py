@@ -1,7 +1,10 @@
 import time
 
 import selenium.webdriver.ie.webdriver
+from selenium.webdriver.common.keys import Keys
+
 from undetected_chromedriver import By
+
 
 
 def login(driver: selenium.webdriver.ie.webdriver.WebDriver, credentials: dict, first_login=False):
@@ -17,13 +20,37 @@ def login(driver: selenium.webdriver.ie.webdriver.WebDriver, credentials: dict, 
         raise ValueError
 
 
-def do_dailies(driver):
+def track_habits(driver):
+    responses = {
+        "minutes": "60",
+        "enter duration in minutes": "60",
+        "enter hours of sleep": "8",
+        "enter number of steps": "30000",
+    }
     driver.get("https://app.member.virginpulse.com/#/healthyhabits")
     time.sleep(5)
 
-    bttn_elements = [elem for elem in driver.find_elements(By.TAG_NAME, "button") if
-                     elem.accessible_name.lower() == "yes"]
-    input_elements = [elem for elem in driver.find_elements(By.TAG_NAME, "input")]
-    for button in bttn_elements:
+    button_elements = [elem for elem in driver.find_elements(By.TAG_NAME, "button") if
+                       elem.accessible_name.lower() == "yes"]
+    for button in button_elements:
         button.click()
-    print('stop')
+
+    # Write out activity to display hidden items
+    activity = [elem for elem in driver.find_elements(By.TAG_NAME, "input") if
+                elem.accessible_name == "What activity did you do? Select an activity or start typing"]
+    activity[0].send_keys("Badminton\ue007")
+
+    input_elements = [elem for elem in driver.find_elements(By.TAG_NAME, "input")]
+    for input_field in input_elements:
+        if input_field.accessible_name.lower() in responses:
+            input_field.send_keys(responses[str(input_field.accessible_name.lower())])
+
+    time.sleep(2)
+
+    button_elements = [elem for elem in driver.find_elements(By.TAG_NAME, "button") if
+                       elem.accessible_name.lower() == "track it!"]
+
+    # JS click instead after entry input
+    for button in button_elements:
+        driver.execute_script("arguments[0].click();", button)
+
