@@ -7,7 +7,7 @@ from tkinter import ttk
 from threading import Thread
 
 import chromedriver_autoinstaller
-from selenium.common import WebDriverException
+
 
 webdriver_path = chromedriver_autoinstaller.install(path="./")
 credentials = {}
@@ -38,9 +38,10 @@ def run_thread() -> None:
 
 
 def full_sequence():
-    # TODO: Change to separate events for button functionality
+    # TODO: Change to separate events for button functionality or remove buttons?
     update_status('ORANGE', 'Starting Driver...')
     driver = driver_handler.start_driver()
+    # driver.implicitly_wait(10) # potentially activate to remove some time.sleep(x)'s
     driver.set_window_size(100, 500)
     update_status('ORANGE', 'Logging In')
     try:
@@ -51,7 +52,11 @@ def full_sequence():
         update_status('RED', 'Login Failed')
         update_entry_state('normal')
     update_options_state('normal')
-    web_handler.track_habits(driver)
+
+    # Actions of driver
+    # web_handler.do_cards(driver)
+    # web_handler.track_habits(driver)
+    # web_handler.do_assessment(driver)
 
 
 def update_status(color, text) -> None:
@@ -73,7 +78,6 @@ username_entry.grid(column=1, row=0)
 password_label = tk.Label(root, text="Password:")
 password_label.grid(column=0, row=1, sticky=tk.E)
 password_entry = tk.Entry(root, show="*", width=25)  # Password is hidden
-password_entry.insert(0, "Nickshell123!")
 password_entry.grid(column=1, row=1)
 
 # Control Buttons
