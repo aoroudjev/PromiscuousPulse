@@ -8,7 +8,6 @@ from threading import Thread
 
 import chromedriver_autoinstaller
 
-
 webdriver_path = chromedriver_autoinstaller.install(path="./")
 credentials = {}
 
@@ -27,7 +26,7 @@ def update_options_state(state) -> None:
     all_button.configure(state=state)
 
 
-def run_thread() -> None:
+def run_thread(event=None) -> None:
     update_entry_state('disabled')
     global credentials
     credentials = {
@@ -54,7 +53,7 @@ def full_sequence():
     update_options_state('normal')
 
     # Actions of driver
-    # web_handler.do_cards(driver)
+    web_handler.do_cards(driver)
     # web_handler.track_habits(driver)
     # web_handler.do_assessment(driver)
 
@@ -63,10 +62,16 @@ def update_status(color, text) -> None:
     status_label.configure(fg=color.upper(), text=text.upper())
 
 
+def enter_send(event):
+    pass
+
+
 root = tk.Tk()
 root.title('Pulse')
 root.geometry('220x200')
 root.resizable(width=False, height=False)
+
+root.bind('<Return>', run_thread)
 
 # Credentials
 username_label = tk.Label(root, text="Username:")
